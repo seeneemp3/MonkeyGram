@@ -1,5 +1,6 @@
 # mac's files
 **/.DS_Store
+src/.DS_Store
 # Compiled class file
 *.class
 

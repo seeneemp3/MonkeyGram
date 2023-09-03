@@ -8,6 +8,16 @@ public class SimpleController {
 
     @GetMapping("/home")
     public String homePage() {
-        return "Котограм";
+        return """
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Welcome to Monkeygram</title>
+                </head>
+                <body>
+                    <h1>Welcome to Monkeygram</h1>
+                    <p>Hello, users! This is Monkeygram, your social networking platform.</p>
+                </body>
+                </html>""";
     }
 }

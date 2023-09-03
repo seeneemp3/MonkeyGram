@@ -12,8 +12,6 @@ import com.personal.monkeygram.service.PostService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.personal.monkeygram.Constants.SORTS;
-
 @RestController()
 @RequestMapping("/feed/friends")
 public class PostFeedController {
@@ -26,7 +24,7 @@ public class PostFeedController {
 
     @PostMapping
     List<Post> getFriendsFeed(@RequestBody FeedParams feedParams) {
-        if (!SORTS.contains(feedParams.getSort())) {
+        if (!feedParams.getSort().equalsIgnoreCase("asc") || !feedParams.getSort().equalsIgnoreCase("desc") ) {
             throw new IncorrectParameterException("sort");
         }
         if (feedParams.getSize() == null || feedParams.getSize() <= 0) {

@@ -22,10 +22,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findUserById(String id) {
-        // выполняем запрос к базе данных.
+
         SqlRowSet userRows = jdbcTemplate.queryForRowSet("select * from cat_user where id = ?", id);
 
-        // обрабатываем результат выполнения запроса
         if(userRows.next()) {
             User user = new User(
                     userRows.getString("id"),

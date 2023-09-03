@@ -7,6 +7,7 @@ import com.personal.monkeygram.model.Post;
 import com.personal.monkeygram.model.User;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,14 +30,6 @@ public class PostService {
     public Collection<Post> findPostsByUser(String authorId, Integer size, String sort) {
         return findPostsByUser(authorId)
                 .stream()
-                .sorted((p0, p1) -> {
-                    int comp = p0.getCreationDate().compareTo(p1.getCreationDate()); //прямой порядок сортировки
-                    if (sort.equals("desc")) {
-                        comp = -1 * comp; //обратный порядок сортировки
-                    }
-                    return comp;
-                })
-                .limit(size)
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(Post::getCreationDate).reversed()).limit(size).collect(Collectors.toList());
     }
 }

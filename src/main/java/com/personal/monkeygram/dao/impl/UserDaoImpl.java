@@ -31,11 +31,11 @@ public class UserDaoImpl implements UserDao {
                     userRows.getString("username"),
                     userRows.getString("nickname"));
 
-            log.info("Найден пользователь: {} {}", user.getId(), user.getNickname());
+            log.info("Found user: {} {}", user.getId(), user.getNickname());
 
             return Optional.of(user);
         } else {
-            log.info("Пользователь с идентификатором {} не найден.", id);
+            log.info("User with id {} was not found.", id);
             return Optional.empty();
         }
     }

@@ -1,13 +1,13 @@
-package com.personal.monkeygram;
+package com.personal.monkeyGram;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MonkeygramApplication {
+public class MonkeyGramApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MonkeygramApplication.class, args);
+		SpringApplication.run(MonkeyGramApplication.class, args);
 	}
 
 }

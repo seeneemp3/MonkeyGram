@@ -1,5 +1,12 @@
 package com.personal.monkeyGram.config;
 
+import com.personal.monkeyGram.sequrity.JwtFilter;
+import com.personal.monkeyGram.sequrity.JwtTokenProvider;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -20,9 +27,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+    private static final String[] AUTH_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/api/v1/auth/**",
+            "/webjars/**"
+    };
 
     private final ApplicationContext applicationContext;
-    //private final JwtTokenProvider tokenProvider;
+    private final JwtTokenProvider tokenProvider;
 
     @Bean
     public PasswordEncoder encoder(){
@@ -31,6 +47,26 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+    @Bean
+    public OpenAPI openAPI() {
+        return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement()
+                        .addList("bearerAuth"))
+                .components(
+                        new Components()
+                                .addSecuritySchemes("bearerAuth",
+                                        new SecurityScheme()
+                                                .type(SecurityScheme.Type.HTTP)
+                                                .scheme("bearer")
+                                                .bearerFormat("JWT")
+                                )
+                )
+                .info(new Info()
+                        .title("mg API")
+                        .description("Demo Spring Boot application")
+                        .version("1.0")
+                );
     }
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
@@ -58,17 +94,12 @@ public class SecurityConfiguration {
                                             response.getWriter()
                                                     .write("Unauthorized.");
                                         }))
-                .authorizeHttpRequests(configurer ->
-                        configurer.requestMatchers("/api/v1/auth/**")
-                                .permitAll()
-                                .requestMatchers("/swagger-ui/**")
-                                .permitAll()
-                                .requestMatchers("/v3/api-docs/**")
-                                .permitAll()
+                .authorizeHttpRequests(req ->
+                        req.requestMatchers(AUTH_WHITELIST).permitAll()
                                 .anyRequest().authenticated())
-                .anonymous(AbstractHttpConfigurer::disable);
-//                .addFilterBefore(new JwtTokenFilter(tokenProvider),
-//                        UsernamePasswordAuthenticationFilter.class);
+                .anonymous(AbstractHttpConfigurer::disable)
+                .addFilterBefore(new JwtFilter(tokenProvider),
+                        UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

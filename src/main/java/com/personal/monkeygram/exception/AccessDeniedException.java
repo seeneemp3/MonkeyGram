@@ -1,5 +1,5 @@
-package com.personal.monkeyGram;
+package com.personal.monkeyGram.exception;
 
-public class AccessDeniedException extends Throwable {
-    
+public class AccessDeniedException extends RuntimeException {
+    public AccessDeniedException(String message){super(message);}
 }

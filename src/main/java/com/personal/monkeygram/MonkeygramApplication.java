@@ -8,6 +8,7 @@ public class MonkeyGramApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MonkeyGramApplication.class, args);
+
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.personal.monkeyGram.sequrity;
+package com.personal.monkeyGram.security;
 
 import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.service.UserService;

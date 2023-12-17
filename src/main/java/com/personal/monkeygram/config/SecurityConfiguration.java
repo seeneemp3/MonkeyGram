@@ -1,7 +1,7 @@
 package com.personal.monkeyGram.config;
 
-import com.personal.monkeyGram.sequrity.JwtFilter;
-import com.personal.monkeyGram.sequrity.JwtTokenProvider;
+import com.personal.monkeyGram.security.JwtFilter;
+import com.personal.monkeyGram.security.JwtTokenProvider;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -40,10 +40,7 @@ public class SecurityConfiguration {
     private final ApplicationContext applicationContext;
     private final JwtTokenProvider tokenProvider;
 
-    @Bean
-    public PasswordEncoder encoder(){
-        return new BCryptPasswordEncoder();
-    }
+
     @Bean
     public AuthenticationManager authManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();

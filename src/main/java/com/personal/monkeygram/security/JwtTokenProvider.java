@@ -1,11 +1,10 @@
-package com.personal.monkeyGram.sequrity;
+package com.personal.monkeyGram.security;
 
 import com.personal.monkeyGram.exception.AccessDeniedException;
 import com.personal.monkeyGram.model.Role;
 import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.props.JwtProperties;
-import com.personal.monkeyGram.sequrity.auth.JwtRequest;
-import com.personal.monkeyGram.sequrity.auth.JwtResponse;
+import com.personal.monkeyGram.security.auth.JwtResponse;
 import com.personal.monkeyGram.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

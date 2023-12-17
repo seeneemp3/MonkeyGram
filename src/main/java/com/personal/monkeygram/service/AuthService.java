@@ -1,7 +1,7 @@
 package com.personal.monkeyGram.service;
 
-import com.personal.monkeyGram.sequrity.auth.JwtRequest;
-import com.personal.monkeyGram.sequrity.auth.JwtResponse;
+import com.personal.monkeyGram.security.auth.JwtRequest;
+import com.personal.monkeyGram.security.auth.JwtResponse;
 
 public interface AuthService {
 

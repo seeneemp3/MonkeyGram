@@ -1,4 +1,4 @@
-package com.personal.monkeyGram.sequrity;
+package com.personal.monkeyGram.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +31,6 @@ public class JwtEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-package com.personal.monkeyGram.sequrity.auth;
+package com.personal.monkeyGram.security.auth;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.personal.monkeyGram.sequrity;
+package com.personal.monkeyGram.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -6,9 +6,9 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
@@ -16,19 +16,21 @@ import java.io.IOException;
 public class JwtFilter extends GenericFilterBean {
     private final JwtTokenProvider provider;
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    @SneakyThrows
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
         String token = ((HttpServletRequest) servletRequest).getHeader("Authorization");
-        if (token != null && !token.startsWith("Bearer ")){
+        if (token != null && token.startsWith("Bearer ")){
             token = token.substring(7);
         }
         try {
-            if (token != null && !token.isBlank() && !token.isEmpty() && provider.isValid(token)){
+            if (token != null && provider.isValid(token)){
                 Authentication auth = provider.getAuthentication(token);
                 if (auth != null){
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
         }catch (Exception e){
+            e.printStackTrace();
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

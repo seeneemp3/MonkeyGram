@@ -2,9 +2,11 @@ package com.personal.monkeyGram.service.impl;
 
 import com.personal.monkeyGram.exception.UserNotFoundException;
 import com.personal.monkeyGram.dao.UserDao;
+import com.personal.monkeyGram.model.Role;
 import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public String addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(List.of(Role.ROLE_USER));
         return userDao.save(user).getId();
     }
 

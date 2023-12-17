@@ -1,9 +1,9 @@
 package com.personal.monkeyGram.service.impl;
 
 import com.personal.monkeyGram.model.User;
-import com.personal.monkeyGram.sequrity.JwtTokenProvider;
-import com.personal.monkeyGram.sequrity.auth.JwtRequest;
-import com.personal.monkeyGram.sequrity.auth.JwtResponse;
+import com.personal.monkeyGram.security.JwtTokenProvider;
+import com.personal.monkeyGram.security.auth.JwtRequest;
+import com.personal.monkeyGram.security.auth.JwtResponse;
 import com.personal.monkeyGram.service.AuthService;
 import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +22,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtResponse login(JwtRequest loginRequest) {
         JwtResponse jwtResponse = new JwtResponse();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(), loginRequest.getPassword())
-        );
+        var auth = new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(), loginRequest.getPassword());
+        try{
+            authenticationManager.authenticate(auth);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         User user = userService.getUserByUsername(loginRequest.getUsername());
         jwtResponse.setId(user.getId());
         jwtResponse.setUsername(user.getUsername());

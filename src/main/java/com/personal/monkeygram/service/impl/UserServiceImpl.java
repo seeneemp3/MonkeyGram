@@ -63,8 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(String userId) {
-        User user = userDao.findById(userId).orElseThrow(() -> new UserNotFoundException("unf"));
-        return user;
+        return userDao.findById(userId).orElseThrow(() -> new UserNotFoundException("unf"));
     }
 
 

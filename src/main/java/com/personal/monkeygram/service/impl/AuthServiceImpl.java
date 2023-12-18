@@ -24,11 +24,7 @@ public class AuthServiceImpl implements AuthService {
         JwtResponse jwtResponse = new JwtResponse();
         var auth = new UsernamePasswordAuthenticationToken(
                 loginRequest.getUsername(), loginRequest.getPassword());
-        try{
-            authenticationManager.authenticate(auth);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        authenticationManager.authenticate(auth);
         User user = userService.getUserByUsername(loginRequest.getUsername());
         jwtResponse.setId(user.getId());
         jwtResponse.setUsername(user.getUsername());

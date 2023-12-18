@@ -22,15 +22,11 @@ public class JwtFilter extends GenericFilterBean {
         if (token != null && token.startsWith("Bearer ")){
             token = token.substring(7);
         }
-        try {
-            if (token != null && provider.isValid(token)){
-                Authentication auth = provider.getAuthentication(token);
-                if (auth != null){
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
+        if (token != null && provider.isValid(token)){
+            Authentication auth = provider.getAuthentication(token);
+            if (auth != null){
+                SecurityContextHolder.getContext().setAuthentication(auth);
             }
-        }catch (Exception e){
-            e.printStackTrace();
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

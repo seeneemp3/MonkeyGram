@@ -66,7 +66,7 @@ public class JwtTokenProvider {
 
     public JwtResponse refreshToken(String refreshToken) {
         if (!isValid(refreshToken)){
-            throw new AccessDeniedException("ade");
+            throw new AccessDeniedException("Access denied");
         }
         String userid = getIdFromToken(refreshToken);
         User user = userService.getUserById(userid);

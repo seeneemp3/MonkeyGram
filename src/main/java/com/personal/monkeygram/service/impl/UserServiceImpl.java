@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         User user = userDao.getByUsername(username);
         if (user == null) {
-           throw new UserNotFoundException("unf");
+           throw new UserNotFoundException("User not found");
         }
         return user;
     }

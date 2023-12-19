@@ -46,7 +46,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByUsername(username));
     }
 
-    @Operation(summary = "Get UserDto by id")
+    @Operation(summary = "Get User by id")
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@RequestParam String userId) {
         return ResponseEntity.ok(userService.getUserById(userId));

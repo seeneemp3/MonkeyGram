@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String deleteUser(String userId) {
-        User user = userDao.findById(userId).orElseThrow(() -> new UserNotFoundException("unf"));
+        User user = userDao.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
         if(user != null){
             userDao.deleteById(userId);
         }

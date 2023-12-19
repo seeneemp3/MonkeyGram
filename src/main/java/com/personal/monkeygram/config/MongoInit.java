@@ -1,5 +1,6 @@
 package com.personal.monkeyGram.config;
 
+import com.personal.monkeyGram.model.Post;
 import com.personal.monkeyGram.model.Role;
 import com.personal.monkeyGram.model.User;
 import org.springframework.boot.CommandLineRunner;
@@ -21,6 +22,12 @@ public class MongoInit {
 
             mongoTemplate.save(user1);
             mongoTemplate.save(user2);
+
+            Post post1 = new Post(user2, "hello", "url");
+            Post post2 = new Post(user2, "hello2", "url2");
+
+            mongoTemplate.save(post1);
+            mongoTemplate.save(post2);
         };
     }
 }

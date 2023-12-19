@@ -60,7 +60,7 @@ public class SecurityConfiguration {
                                 )
                 )
                 .info(new Info()
-                        .title("mg API")
+                        .title("MonkeyGram API")
                         .description("Demo Spring Boot application")
                         .version("1.0")
                 );

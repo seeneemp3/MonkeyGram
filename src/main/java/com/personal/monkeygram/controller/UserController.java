@@ -4,6 +4,7 @@ import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +19,7 @@ public class UserController {
 
     @Operation(summary = "Add new user")
     @PostMapping
-    public ResponseEntity<?> addUser(@RequestBody User user) {
+    public ResponseEntity<?> addUser(@Valid @RequestBody User user) {
         return ResponseEntity.ok(userService.addUser(user));
     }
 
@@ -31,7 +32,7 @@ public class UserController {
 
     @Operation(summary = "Update user")
     @PatchMapping()
-    public ResponseEntity<?> updateUser(@RequestBody User user) {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(user));
     }
 

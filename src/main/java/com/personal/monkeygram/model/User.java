@@ -1,6 +1,7 @@
 package com.personal.monkeyGram.model;
 
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -14,6 +15,8 @@ import java.util.List;
 public class User {
     @Id
     private String id;
+    @NotNull(message = "Username must be not null")
+    @NotBlank
     private String username;
     private String nickname;
     private String password;

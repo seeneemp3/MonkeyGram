@@ -1,5 +1,6 @@
 package com.personal.monkeyGram.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,16 +15,18 @@ import java.time.LocalDateTime;
 @Document(collection = "Posts")
 public class Post {
     @Id
+    @Schema(hidden = true)
     private String id;
-    @DBRef
-    private User user;
+    private String userId;
     private String description;
+    @Schema(hidden = true)
     private Long likes;
     private String url;
+    @Schema(hidden = true)
     private LocalDateTime date;
 
-    public Post(User user, String description, String url) {
-        this.user = user;
+    public Post(String userId, String description, String url) {
+        this.userId = userId;
         this.description = description;
         this.likes = 0L;
         this.url = url;

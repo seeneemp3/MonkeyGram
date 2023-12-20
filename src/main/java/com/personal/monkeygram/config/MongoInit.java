@@ -23,8 +23,8 @@ public class MongoInit {
             mongoTemplate.save(user1);
             mongoTemplate.save(user2);
 
-            Post post1 = new Post(user2, "hello", "url");
-            Post post2 = new Post(user2, "hello2", "url2");
+            Post post1 = new Post(user2.getId(), "hello", "url");
+            Post post2 = new Post(user2.getId(), "hello2", "url2");
 
             mongoTemplate.save(post1);
             mongoTemplate.save(post2);

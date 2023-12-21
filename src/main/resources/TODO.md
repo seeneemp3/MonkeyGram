@@ -1,0 +1,5 @@
+- [ ] set admin method controller
+- [ ] set as admin
+- [ ] dto and mapping
+- [ ] update post?
+- [ ] return usernames instead of ids

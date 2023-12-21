@@ -17,8 +17,8 @@ public class MongoInit {
         return args -> {
             mongoTemplate.dropCollection(User.class);
 
-            User user1 = new User( "user1", "user1", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC", List.of(Role.ROLE_USER, Role.ROLE_ADMIN));
-            User user2 = new User( "user2", "user2", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC", List.of(Role.ROLE_USER));
+            User user1 = new User( "user1", "user1", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC");
+            User user2 = new User( "user2", "user2", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC");
 
             mongoTemplate.save(user1);
             mongoTemplate.save(user2);

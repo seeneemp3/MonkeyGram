@@ -1,36 +1,32 @@
 package com.personal.monkeyGram.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-
 @Getter
 @Setter
-@Document(collection = "Posts")
-public class Post {
+@Document(collection = "Comments")
+public class Comment {
     @Id
     @Schema(hidden = true)
     private String id;
+    @NotBlank
+    private String body;
     private String userId;
-    private String description;
     @Schema(hidden = true)
-    private Long likes;
-    private String url;
+    private String postId;
     @Schema(hidden = true)
     private LocalDateTime date;
-    private Collection<String> commentIds;
 
-    public Post(String userId, String description, String url) {
+    public Comment(String body, String userId, String postId) {
+        this.body = body;
         this.userId = userId;
-        this.description = description;
-        this.likes = 0L;
-        this.url = url;
+        this.postId = postId;
         this.date = LocalDateTime.now();
     }
 }

@@ -3,6 +3,7 @@ package com.personal.monkeyGram.controller;
 import com.personal.monkeyGram.model.Comment;
 import com.personal.monkeyGram.model.Post;
 import com.personal.monkeyGram.service.CommentService;
+import com.personal.monkeyGram.service.LikeService;
 import com.personal.monkeyGram.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
     private final PostService postService;
     private final CommentService commentService;
+    private final LikeService likeService;
 
     @Operation(summary = "Add new post")
     @PostMapping
@@ -33,7 +35,7 @@ public class PostController {
     }
 
     @Operation(summary = "Get Posts by userId")
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getByUserId(@RequestParam String userId) {
         return ResponseEntity.ok(postService.findPostsByUserId(userId));
     }
@@ -47,6 +49,18 @@ public class PostController {
     @PostMapping("/{postId}/{commentId}")
     public ResponseEntity<?> addComment(@PathVariable String postId, @PathVariable String commentId) {
         return ResponseEntity.ok(commentService.deleteComment(commentId));
+    }
+
+    @Operation(summary = "Add like")
+    @PostMapping("/{postId}/likes")
+    public ResponseEntity<?> addLike(@PathVariable String postId) {
+        return ResponseEntity.ok(likeService.addLike(postId));
+    }
+
+    @Operation(summary = "Remove like")
+    @DeleteMapping("/{postId}/likes")
+    public ResponseEntity<?> removeLike(@PathVariable String postId) {
+        return ResponseEntity.ok(likeService.removeLike(postId));
     }
 
 }

@@ -19,6 +19,8 @@ public class MongoInit {
 
             User user1 = new User( "user1", "user1", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC");
             User user2 = new User( "user2", "user2", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC");
+            user1.setRoles(List.of(Role.ROLE_USER, Role.ROLE_ADMIN));
+            user2.setRoles(List.of(Role.ROLE_USER));
 
             mongoTemplate.save(user1);
             mongoTemplate.save(user2);

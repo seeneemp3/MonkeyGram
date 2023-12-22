@@ -8,7 +8,6 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -19,8 +18,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.context.annotation.RequestScope;
 
 @Configuration
 @EnableWebSecurity
@@ -37,13 +39,17 @@ public class SecurityConfiguration {
             "/webjars/**"
     };
 
-    private final ApplicationContext applicationContext;
     private final JwtTokenProvider tokenProvider;
 
 
     @Bean
     public AuthenticationManager authManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+    @Bean
+    @RequestScope
+    public Authentication authentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
     @Bean
     public OpenAPI openAPI() {

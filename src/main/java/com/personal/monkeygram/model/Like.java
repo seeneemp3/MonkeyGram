@@ -1,0 +1,18 @@
+package com.personal.monkeyGram.model;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Getter
+@Setter
+@Document(collection = "Likes")
+public class Like {
+    private String userId;
+    private String postId;
+
+    public Like(String userId, String postId) {
+        this.userId = userId;
+        this.postId = postId;
+    }
+}

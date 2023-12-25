@@ -10,8 +10,9 @@ import com.personal.monkeyGram.service.LikeService;
 import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +26,12 @@ public class LikeServiceImpl implements LikeService {
     public String addLike(String postId) {
         Post post = postDao.findById(postId).orElseThrow(() -> new PostNotFoundException("Post not found"));
         User user = userService.getUserByUsername(auth.getName());
-        Like like = likeDao.getByUserIdAndPostId(user.getId(), postId).orElse(new Like(user.getId(), postId));
-        likeDao.save(like);
-        post.setLikes(post.getLikes() + 1);
+        Optional<Like> like = likeDao.getByUserIdAndPostId(user.getId(), postId);
+        if(like.isEmpty()){
+           like = Optional.of(new Like(user.getId(), postId));
+            post.setLikes(post.getLikes() + 1);
+        }
+        likeDao.save(like.get());
         postDao.save(post);
         return postId;
     }

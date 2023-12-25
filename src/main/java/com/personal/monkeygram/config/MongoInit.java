@@ -1,8 +1,6 @@
 package com.personal.monkeyGram.config;
 
-import com.personal.monkeyGram.model.Post;
-import com.personal.monkeyGram.model.Role;
-import com.personal.monkeyGram.model.User;
+import com.personal.monkeyGram.model.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +14,9 @@ public class MongoInit {
     CommandLineRunner initUsers(MongoTemplate mongoTemplate) {
         return args -> {
             mongoTemplate.dropCollection(User.class);
+            mongoTemplate.dropCollection(Post.class);
+            mongoTemplate.dropCollection(Like.class);
+            mongoTemplate.dropCollection(Follow.class);
 
             User user1 = new User( "user1", "user1", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC");
             User user2 = new User( "user2", "user2", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC");

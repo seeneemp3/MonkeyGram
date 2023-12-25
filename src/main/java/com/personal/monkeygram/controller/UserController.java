@@ -1,6 +1,7 @@
 package com.personal.monkeyGram.controller;
 
 import com.personal.monkeyGram.model.User;
+import com.personal.monkeyGram.service.FollowService;
 import com.personal.monkeyGram.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,4 +53,5 @@ public class UserController {
     public ResponseEntity<?> getUserById(@RequestParam String userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
+
 }

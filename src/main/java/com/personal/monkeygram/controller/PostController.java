@@ -42,13 +42,18 @@ public class PostController {
 
     @Operation(summary = "Add new comment")
     @PostMapping("/{postId}")
-    public ResponseEntity<?> addComment(@RequestBody Comment comment, @PathVariable String postId) {
-        return ResponseEntity.ok(commentService.addComment(comment));
+    public ResponseEntity<?> addComment(@RequestBody String body, @PathVariable String postId) {
+        return ResponseEntity.ok(commentService.addComment(body, postId));
     }
     @Operation(summary = "Delete comment")
-    @PostMapping("/{postId}/{commentId}")
-    public ResponseEntity<?> addComment(@PathVariable String postId, @PathVariable String commentId) {
-        return ResponseEntity.ok(commentService.deleteComment(commentId));
+    @DeleteMapping("/{postId}/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable String postId, @PathVariable String commentId) {
+        return ResponseEntity.ok(commentService.deleteComment(postId, commentId));
+    }
+    @Operation(summary = "Get all comments")
+    @GetMapping("/{postId}/comments")
+    public ResponseEntity<?> getComments(@PathVariable String postId) {
+        return ResponseEntity.ok(commentService.findAllByPostId(postId));
     }
 
     @Operation(summary = "Add like")

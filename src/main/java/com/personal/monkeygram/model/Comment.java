@@ -18,15 +18,8 @@ public class Comment {
     @NotBlank
     private String body;
     private String userId;
-    @Schema(hidden = true)
     private String postId;
     @Schema(hidden = true)
     private LocalDateTime date;
 
-    public Comment(String body, String userId, String postId) {
-        this.body = body;
-        this.userId = userId;
-        this.postId = postId;
-        this.date = LocalDateTime.now();
-    }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 @Setter
@@ -32,5 +33,6 @@ public class Post {
         this.likes = 0L;
         this.url = url;
         this.date = LocalDateTime.now();
+        this.commentIds = Collections.emptySet();
     }
 }

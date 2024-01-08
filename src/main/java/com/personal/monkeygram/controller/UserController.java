@@ -18,16 +18,10 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @Operation(summary = "Add new user")
-    @PostMapping
-    public ResponseEntity<?> addUser(@Valid @RequestBody User user) {
-        return ResponseEntity.ok(userService.addUser(user));
-    }
-
     @Operation(summary = "Delete user by id")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@RequestParam String userId) {
+    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
         return ResponseEntity.ok(userService.deleteUser(userId));
     }
 
@@ -44,13 +38,13 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<?> getUserByUsername(@RequestParam String username) {
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok(userService.getUserByUsername(username));
     }
 
     @Operation(summary = "Get User by id")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@RequestParam String userId) {
+    public ResponseEntity<?> getUserById(@PathVariable String userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 

@@ -5,7 +5,9 @@ import com.personal.monkeyGram.exception.PostNotFoundException;
 import com.personal.monkeyGram.model.Post;
 import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.service.PostService;
+import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostDao postDao;
+    private final UserService userService;
+    private final Authentication auth;
 
     @Override
     public String addPost(Post post) {
+        User user = userService.getUserByUsername(auth.getName());
+        post.setUserId(user.getId());
         return postDao.save(post).getId();
     }
 
@@ -57,4 +63,12 @@ public class PostServiceImpl implements PostService {
         }
         return postDao.save(original);
     }
+
+    @Override
+    public List<Post> top10Liked() {
+        User user = userService.getUserByUsername(auth.getName());
+
+        return postDao.findTop10ByUserIdNotOrderByLikesDesc(user.getId());
+    }
+
 }

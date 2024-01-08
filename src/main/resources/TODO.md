@@ -1,6 +1,6 @@
 - [ ] set admin method controller
 - [ ] set as admin
 - [ ] dto and mapping
-- [ ] update post?
+- [x] update post?
 - [ ] return usernames instead of ids
 - [ ] cache for feed?

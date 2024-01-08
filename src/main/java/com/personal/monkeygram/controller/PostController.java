@@ -1,6 +1,5 @@
 package com.personal.monkeyGram.controller;
 
-import com.personal.monkeyGram.model.Comment;
 import com.personal.monkeyGram.model.Post;
 import com.personal.monkeyGram.service.CommentService;
 import com.personal.monkeyGram.service.LikeService;
@@ -30,13 +29,13 @@ public class PostController {
     @Operation(summary = "Delete post by id")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@RequestParam String postId) {
+    public ResponseEntity<?> deletePost(@PathVariable String postId) {
         return ResponseEntity.ok(postService.deletePost(postId));
     }
 
     @Operation(summary = "Get Posts by userId")
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getByUserId(@RequestParam String userId) {
+    public ResponseEntity<?> getByUserId(@PathVariable String userId) {
         return ResponseEntity.ok(postService.findPostsByUserId(userId));
     }
 

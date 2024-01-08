@@ -15,22 +15,22 @@ public class FollowController {
     private final FollowService followService;
     @Operation(summary = "Get User followers by userId")
     @GetMapping("/{id}/followers")
-    public ResponseEntity<?> getFollowersByUserId(@RequestParam String userId) {
+    public ResponseEntity<?> getFollowersByUserId(@PathVariable String userId) {
         return ResponseEntity.ok(followService.getFollowers(userId));
     }
     @Operation(summary = "Get User followed by userId")
     @GetMapping("/{id}/followed")
-    public ResponseEntity<?> getFollowedByUserId(@RequestParam String userId) {
+    public ResponseEntity<?> getFollowedByUserId(@PathVariable String userId) {
         return ResponseEntity.ok(followService.getFollowed(userId));
     }
     @Operation(summary = "Follow user by userId")
     @PostMapping("/{id}/follow")
-    public ResponseEntity<?> followByUserId(@RequestParam String userId) {
+    public ResponseEntity<?> followByUserId(@PathVariable String userId) {
         return ResponseEntity.ok(followService.follow(userId));
     }
     @Operation(summary = "Unfollow user by userId")
     @PostMapping("/{id}/unfollow")
-    public ResponseEntity<?> unfollowByUserId(@RequestParam String userId) {
+    public ResponseEntity<?> unfollowByUserId(@PathVariable String userId) {
         return ResponseEntity.ok(followService.unfollow(userId));
     }
 }

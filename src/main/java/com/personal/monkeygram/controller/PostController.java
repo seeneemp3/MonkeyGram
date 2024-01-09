@@ -29,8 +29,8 @@ public class PostController {
     @Operation(summary = "Delete post by id")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable String postId) {
-        return ResponseEntity.ok(postService.deletePost(postId));
+    public ResponseEntity<?> deletePost(@PathVariable String id) {
+        return ResponseEntity.ok(postService.deletePost(id));
     }
 
     @Operation(summary = "Get Posts by userId")

@@ -21,8 +21,8 @@ public class UserController {
     @Operation(summary = "Delete user by id")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
-        return ResponseEntity.ok(userService.deleteUser(userId));
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+        return ResponseEntity.ok(userService.deleteUser(id));
     }
 
     @Operation(summary = "Update user")
@@ -44,8 +44,8 @@ public class UserController {
 
     @Operation(summary = "Get User by id")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable String userId) {
-        return ResponseEntity.ok(userService.getUserById(userId));
+    public ResponseEntity<?> getUserById(@PathVariable String id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
 }

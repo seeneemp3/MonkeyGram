@@ -7,7 +7,7 @@ import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.service.PostService;
 import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +17,10 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
     private final PostDao postDao;
     private final UserService userService;
-    private final Authentication auth;
 
     @Override
     public String addPost(Post post) {
-        User user = userService.getUserByUsername(auth.getName());
+        User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         post.setUserId(user.getId());
         return postDao.save(post).getId();
     }
@@ -66,7 +65,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> top10Liked() {
-        User user = userService.getUserByUsername(auth.getName());
+        User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         return postDao.findTop10ByUserIdNotOrderByLikesDesc(user.getId());
     }

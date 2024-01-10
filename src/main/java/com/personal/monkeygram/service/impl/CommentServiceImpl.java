@@ -8,7 +8,7 @@ import com.personal.monkeyGram.service.CommentService;
 import com.personal.monkeyGram.service.PostService;
 import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.personal.monkeyGram.exception.CommentNotFoundException;
 
@@ -21,12 +21,12 @@ public class CommentServiceImpl implements CommentService {
     private final CommentDao commentDao;
     private final PostService postService;
     private final UserService userService;
-    private final Authentication auth;
+
 
     @Override
     public String addComment(String body, String postId) {
         Post post = postService.findById(postId);
-        User user = userService.getUserByUsername(auth.getName());
+        User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Comment comment = new Comment();
         comment.setBody(body);

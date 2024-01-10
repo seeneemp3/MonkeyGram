@@ -46,11 +46,7 @@ public class SecurityConfiguration {
     public AuthenticationManager authManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-    @Bean
-    @RequestScope
-    public Authentication authentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
+
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()

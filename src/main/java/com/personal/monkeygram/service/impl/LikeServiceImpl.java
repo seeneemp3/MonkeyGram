@@ -11,6 +11,7 @@ import com.personal.monkeyGram.service.PostService;
 import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,12 +22,11 @@ public class LikeServiceImpl implements LikeService {
     private final PostService postService;
     private final UserService userService;
     private final LikeDao likeDao;
-    private final Authentication auth;
 
     @Override
     public String addLike(String postId) {
         Post post = postService.findById(postId);
-        User user = userService.getUserByUsername(auth.getName());
+        User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Optional<Like> like = likeDao.getByUserIdAndPostId(user.getId(), postId);
         if(like.isEmpty()){
            like = Optional.of(new Like(user.getId(), postId));
@@ -40,7 +40,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public String removeLike(String postId) {
         Post post = postService.findById(postId);
-        User user = userService.getUserByUsername(auth.getName());
+        User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         if (likeDao.deleteByUserIdAndPostId(user.getId(), postId) > 0){
             post.setLikes(post.getLikes() - 1);
             postService.updatePost(post);

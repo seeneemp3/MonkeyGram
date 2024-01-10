@@ -6,11 +6,10 @@ import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.service.FollowService;
 import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,13 +18,12 @@ import java.util.Set;
 public class FollowServiceImpl implements FollowService {
     private final UserService userService;
     private final FollowDao followDao;
-    private final Authentication auth;
 
     @Override
     @Transactional
     public String follow(String userId) {
         User user = userService.getUserById(userId);
-        User currentUser = userService.getUserByUsername(auth.getName());
+        User currentUser = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Follow userFollow = createOrGetFollowForUser(user.getId());
         Follow currentUserFollow = createOrGetFollowForUser(currentUser.getId());
@@ -43,7 +41,7 @@ public class FollowServiceImpl implements FollowService {
     @Transactional
     public String unfollow(String userId) {
         User user = userService.getUserById(userId);
-        User currentUser = userService.getUserByUsername(auth.getName());
+        User currentUser = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Follow userFollow = createOrGetFollowForUser(user.getId());
         Follow currentUserFollow = createOrGetFollowForUser(currentUser.getId());

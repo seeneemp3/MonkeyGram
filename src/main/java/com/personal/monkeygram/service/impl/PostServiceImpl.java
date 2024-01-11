@@ -7,7 +7,6 @@ import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.service.PostService;
 import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

@@ -53,11 +53,11 @@ public class TestConfig {
        return new UserServiceImpl(userDao, testPasswordEncoder());
     }
 
-    @Bean
-    @Primary
-    public PostServiceImpl postService(PostDao postDao, UserDao userDao){
-        return new PostServiceImpl(postDao, userService(userDao));
-    }
+//    @Bean
+//    @Primary
+//    public PostServiceImpl postService(PostDao postDao, UserDao userDao){
+//        return new PostServiceImpl(postDao, userService(userDao));
+//    }
 
     @Bean
     @Primary

@@ -7,6 +7,7 @@ import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.service.PostService;
 import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +28,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public String deletePost(String postId) {
-        Post post = postDao.findById(postId).orElseThrow(() -> new PostNotFoundException("Post not found"));
-        if(post != null){
+        User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Post post = findById(postId);
+        if(post.getUserId().equals(user.getId())){
             postDao.deleteById(postId);
-        }
+        }else throw new PostNotFoundException("Can't delete others post");
         return postId;
     }
 
@@ -66,7 +68,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> top10Liked() {
         User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-
         return postDao.findTop10ByUserIdNotOrderByLikesDesc(user.getId());
     }
 

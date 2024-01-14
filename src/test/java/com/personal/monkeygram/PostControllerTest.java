@@ -1,27 +1,41 @@
 package com.personal.monkeygram;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.personal.monkeyGram.MonkeyGramApplication;
 import com.personal.monkeyGram.controller.PostController;
+import com.personal.monkeyGram.dao.UserDao;
 import com.personal.monkeyGram.model.Post;
 import com.personal.monkeyGram.model.Role;
+import com.personal.monkeyGram.model.User;
+import com.personal.monkeyGram.props.JwtProperties;
 import com.personal.monkeyGram.security.JwtTokenProvider;
 import com.personal.monkeyGram.service.CommentService;
 import com.personal.monkeyGram.service.LikeService;
 import com.personal.monkeyGram.service.PostService;
 import com.personal.monkeygram.config.TestConfig;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import java.security.Key;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +44,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = PostController.class)
-@ContextConfiguration(classes = {MonkeyGramApplication.class, TestConfig.class})
+@ContextConfiguration(classes = TestConfig.class)
+@ActiveProfiles("test")
+@Import(TestConfig.class)
 public class PostControllerTest {
 
     @Autowired
@@ -41,6 +57,8 @@ public class PostControllerTest {
 
     @MockBean
     private PostService postService;
+    @MockBean
+    private UserDao userDao;
 
     @MockBean
     private CommentService commentService;
@@ -48,12 +66,12 @@ public class PostControllerTest {
     @MockBean
     private LikeService likeService;
 
-    @MockBean
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    private String createTestToken(String username) {
+    private String createTestToken() {
         List<Role> roles = List.of(Role.ROLE_USER);
-        return jwtTokenProvider.createAccessToken("123", "user000", roles);
+        return jwtTokenProvider.createAccessToken("123", "user1", roles);
     }
     private MockHttpServletRequestBuilder withJwt(MockHttpServletRequestBuilder requestBuilder, String token) {
         return requestBuilder.header("Authorization", "Bearer " + token);
@@ -63,18 +81,24 @@ public class PostControllerTest {
     @Test
     @WithMockUser(username = "user1", password = "123")
     public void testAddPost() throws Exception {
+        User user = new User("user1", "user1", "123");
+        user.setRoles(List.of(Role.ROLE_USER));
         Post post = new Post("123", "");
         post.setId("postId");
-        String token = createTestToken("123");
+        post.setUserId("123");
+
+        Mockito.when(userDao.getByUsername("user1")).thenReturn(user);
+        String token = createTestToken();
 
         when(postService.addPost(any(Post.class))).thenReturn(post.getId());
 
         mockMvc.perform(withJwt(post("/api/v1/post"), token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(post)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(post)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description", is("123")));
     }
+
 
     @Test
     @WithMockUser

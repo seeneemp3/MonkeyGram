@@ -5,19 +5,15 @@ import com.personal.monkeyGram.controller.PostController;
 import com.personal.monkeyGram.dao.PostDao;
 import com.personal.monkeyGram.dao.UserDao;
 import com.personal.monkeyGram.model.Post;
-import com.personal.monkeyGram.model.Role;
-import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.security.JwtTokenProvider;
-import com.personal.monkeyGram.security.auth.JwtRequest;
-import com.personal.monkeyGram.security.auth.JwtResponse;
 import com.personal.monkeyGram.service.CommentService;
 import com.personal.monkeyGram.service.LikeService;
 import com.personal.monkeyGram.service.PostService;
-import com.personal.monkeyGram.service.impl.AuthServiceImpl;
 import com.personal.monkeyGram.service.impl.UserServiceImpl;
 import com.personal.monkeygram.config.TestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,6 +22,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,6 +38,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = PostController.class)
@@ -55,7 +55,7 @@ public class PostControllerTest {
 
     @MockBean
     private PostService postService;
-    @MockBean
+    @Mock
     private AuthenticationManager authenticationManager;
 
     @MockBean
@@ -75,48 +75,27 @@ public class PostControllerTest {
     @MockBean
     private JwtTokenProvider tokenProvider;
 
-    @Autowired
-    private AuthServiceImpl authService;
-
-    public String token;
 
     @BeforeEach
     public void login(){
-        String userId = "1";
         String username = "username";
         String password = "password";
-        List<Role> roles = Collections.emptyList();
-        String accessToken = "accessToken";
-        String refreshToken = "refreshToken";
-        JwtRequest request = new JwtRequest();
-        request.setUsername(username);
-        request.setPassword(password);
-        User user = new User(username, username, password);
-        user.setId(userId);
-        user.setUsername(username);
-        user.setRoles(roles);
-        Mockito.when(userService.getUserByUsername(username))
-                .thenReturn(user);
-        Mockito.when(tokenProvider.createAccessToken(userId, username, roles))
-                .thenReturn(accessToken);
-        Mockito.when(tokenProvider.createRefreshToken(userId, username))
-                .thenReturn(refreshToken);
-        JwtResponse response = authService.login(request);
-        Mockito.verify(authenticationManager)
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                request.getUsername(),
-                                request.getPassword())
-                );
+        List<GrantedAuthority> roles = Collections.emptyList();
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                username, password, roles);
+        Mockito.when(authenticationManager.authenticate(Mockito.any(Authentication.class))).thenReturn(auth);
+        Mockito.when(tokenProvider.isValid(Mockito.anyString())).thenReturn(true);
+        Mockito.when(tokenProvider.getAuthentication(Mockito.anyString())).thenReturn(auth);
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
-    private MockHttpServletRequestBuilder withJwt(MockHttpServletRequestBuilder requestBuilder, String token) {
-        return requestBuilder.header("Authorization", "Bearer " + token);
+    private MockHttpServletRequestBuilder withJwt(MockHttpServletRequestBuilder requestBuilder) {
+        return requestBuilder.header("Authorization", "Bearer " + "accessToken");
     }
 
 
     @Test
-    @WithMockUser(username = "username", password = "password")
     public void testAddPost() throws Exception {
 
         Post post = new Post("123", "");
@@ -125,7 +104,7 @@ public class PostControllerTest {
 
         when(postService.addPost(any(Post.class))).thenReturn(post.getId());
 
-        mockMvc.perform(withJwt(post("/api/v1/post"), token)
+        mockMvc.perform(withJwt(post("/api/v1/post"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(post)))
                 .andExpect(status().isOk())

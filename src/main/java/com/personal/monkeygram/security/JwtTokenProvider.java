@@ -12,6 +12,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtTokenProvider {
     private final JwtProperties properties;
     private final UserDetailsService detailsService;
@@ -35,6 +37,7 @@ public class JwtTokenProvider {
     }
 
     public String createAccessToken(String userId, String username, List<Role> roles){
+        log.debug(String.format("---Access token creation with userId: %s, username: %s and roles %s", userId, username, roles.toString()));
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("id", userId);
         claims.put("roles", roles);

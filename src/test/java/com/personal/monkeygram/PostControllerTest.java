@@ -2,19 +2,21 @@ package com.personal.monkeygram;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.personal.monkeyGram.controller.PostController;
+import com.personal.monkeyGram.dao.PostDao;
 import com.personal.monkeyGram.dao.UserDao;
 import com.personal.monkeyGram.model.Post;
 import com.personal.monkeyGram.model.Role;
 import com.personal.monkeyGram.model.User;
-import com.personal.monkeyGram.props.JwtProperties;
 import com.personal.monkeyGram.security.JwtTokenProvider;
+import com.personal.monkeyGram.security.auth.JwtRequest;
+import com.personal.monkeyGram.security.auth.JwtResponse;
 import com.personal.monkeyGram.service.CommentService;
 import com.personal.monkeyGram.service.LikeService;
 import com.personal.monkeyGram.service.PostService;
+import com.personal.monkeyGram.service.impl.AuthServiceImpl;
+import com.personal.monkeyGram.service.impl.UserServiceImpl;
 import com.personal.monkeygram.config.TestConfig;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +24,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import java.security.Key;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -58,37 +56,72 @@ public class PostControllerTest {
     @MockBean
     private PostService postService;
     @MockBean
+    private AuthenticationManager authenticationManager;
+
+    @MockBean
+    private UserServiceImpl userService;
+
+    @MockBean
     private UserDao userDao;
 
+    @MockBean
+    private PostDao postDao;
     @MockBean
     private CommentService commentService;
 
     @MockBean
     private LikeService likeService;
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    private JwtTokenProvider tokenProvider;
 
-    private String createTestToken() {
-        List<Role> roles = List.of(Role.ROLE_USER);
-        return jwtTokenProvider.createAccessToken("123", "user1", roles);
+    @Autowired
+    private AuthServiceImpl authService;
+
+    public String token;
+
+    @BeforeEach
+    public void login(){
+        String userId = "1";
+        String username = "username";
+        String password = "password";
+        List<Role> roles = Collections.emptyList();
+        String accessToken = "accessToken";
+        String refreshToken = "refreshToken";
+        JwtRequest request = new JwtRequest();
+        request.setUsername(username);
+        request.setPassword(password);
+        User user = new User(username, username, password);
+        user.setId(userId);
+        user.setUsername(username);
+        user.setRoles(roles);
+        Mockito.when(userService.getUserByUsername(username))
+                .thenReturn(user);
+        Mockito.when(tokenProvider.createAccessToken(userId, username, roles))
+                .thenReturn(accessToken);
+        Mockito.when(tokenProvider.createRefreshToken(userId, username))
+                .thenReturn(refreshToken);
+        JwtResponse response = authService.login(request);
+        Mockito.verify(authenticationManager)
+                .authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                request.getUsername(),
+                                request.getPassword())
+                );
     }
+
     private MockHttpServletRequestBuilder withJwt(MockHttpServletRequestBuilder requestBuilder, String token) {
         return requestBuilder.header("Authorization", "Bearer " + token);
     }
 
 
     @Test
-    @WithMockUser(username = "user1", password = "123")
+    @WithMockUser(username = "username", password = "password")
     public void testAddPost() throws Exception {
-        User user = new User("user1", "user1", "123");
-        user.setRoles(List.of(Role.ROLE_USER));
+
         Post post = new Post("123", "");
         post.setId("postId");
-        post.setUserId("123");
-
-        Mockito.when(userDao.getByUsername("user1")).thenReturn(user);
-        String token = createTestToken();
+        post.setUserId("1");
 
         when(postService.addPost(any(Post.class))).thenReturn(post.getId());
 

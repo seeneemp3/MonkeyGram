@@ -30,7 +30,6 @@ public class TestConfig {
     }
 
     @Bean
-    @Primary
     public JwtProperties jwtProperties(){
         var jwtProps = new JwtProperties();
         jwtProps.setSecret("cS4tMzRja3JxY1treDkvLy80MCxndnEuLi5reC0zLmY5MGp4aDg5dm0wOC0wNT05NCopXygpIys8Iz5WQz8rPiMpKDw=");
@@ -38,7 +37,6 @@ public class TestConfig {
     }
 
     @Bean
-    @Primary
     public UserDetailsService userDetailsService(UserDao userDao){
          return new JwtUserService(userService(userDao));
     }

@@ -8,9 +8,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
-@Document(collection = "Comments")
+@Document(collection = "comments")
 public class Comment {
     @Id
     @Schema(hidden = true)

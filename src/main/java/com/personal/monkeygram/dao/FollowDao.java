@@ -7,5 +7,6 @@ import java.util.Set;
 
 public interface FollowDao extends MongoRepository<Follow, String> {
     Follow findByUserId(String userId);
+
     Set<String> getFollowersByUserId(String userId);
 }

@@ -21,7 +21,7 @@ public class FeedServiceImpl implements FeedService {
     private final PostService postService;
     private final FollowService followService;
 
-    public List<Post> getTop10Rated(){
+    public List<Post> getTop10Rated() {
         FeedComparator feedComparator = new FeedComparator();
         User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         List<String> followed = new ArrayList<>(followService.getFollowed(user.getId()));

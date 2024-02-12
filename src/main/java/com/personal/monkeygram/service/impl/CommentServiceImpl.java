@@ -1,6 +1,7 @@
 package com.personal.monkeyGram.service.impl;
 
 import com.personal.monkeyGram.dao.CommentDao;
+import com.personal.monkeyGram.exception.CommentNotFoundException;
 import com.personal.monkeyGram.model.Comment;
 import com.personal.monkeyGram.model.Post;
 import com.personal.monkeyGram.model.User;
@@ -10,7 +11,6 @@ import com.personal.monkeyGram.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.personal.monkeyGram.exception.CommentNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;

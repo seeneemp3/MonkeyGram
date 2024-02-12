@@ -9,16 +9,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JwtEntityFactory {
-    public static JwtEntity create (User user){
+    public static JwtEntity create(User user) {
         return new JwtEntity(
-                user.getId(),
                 user.getUsername(),
                 user.getPassword(),
-                mapRoles(user.getRoles())
+                mapRoles(user.getRoles()),
+                user.getId()
         );
     }
 
-    private static List<GrantedAuthority> mapRoles(List<Role> roles){
+    private static List<GrantedAuthority> mapRoles(List<Role> roles) {
         return roles.stream()
                 .map(Enum::name)
                 .map(SimpleGrantedAuthority::new)

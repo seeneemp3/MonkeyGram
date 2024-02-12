@@ -12,7 +12,7 @@ import java.util.Collections;
 
 @Getter
 @Setter
-@Document(collection = "Posts")
+@Document(collection = "posts")
 public class Post {
     @Id
     @Schema(hidden = true)

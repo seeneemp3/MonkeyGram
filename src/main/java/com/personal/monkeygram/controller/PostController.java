@@ -50,12 +50,14 @@ public class PostController {
         log.info("Add new comment request");
         return ResponseEntity.ok(commentService.addComment(body, postId));
     }
+
     @Operation(summary = "Delete comment")
     @DeleteMapping("/{postId}/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable String postId, @PathVariable String commentId) {
         log.info("Delete comment request");
         return ResponseEntity.ok(commentService.deleteComment(postId, commentId));
     }
+
     @Operation(summary = "Get all comments")
     @GetMapping("/{postId}/comments")
     public ResponseEntity<?> getComments(@PathVariable String postId) {

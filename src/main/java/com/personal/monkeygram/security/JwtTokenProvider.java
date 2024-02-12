@@ -31,12 +31,13 @@ public class JwtTokenProvider {
     private final UserDetailsService detailsService;
     private final UserService userService;
     private Key key;
+
     @PostConstruct
-    public void init(){
+    public void init() {
         this.key = Keys.hmacShaKeyFor(properties.getSecret().getBytes());
     }
 
-    public String createAccessToken(String userId, String username, List<Role> roles){
+    public String createAccessToken(String userId, String username, List<Role> roles) {
         log.debug(String.format("---Access token creation with userId: %s, username: %s and roles %s", userId, username, roles.toString()));
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("id", userId);
@@ -52,7 +53,8 @@ public class JwtTokenProvider {
                 .signWith(key)
                 .compact();
     }
-    public String createRefreshToken(String userId, String username){
+
+    public String createRefreshToken(String userId, String username) {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("id", userId);
 
@@ -68,7 +70,7 @@ public class JwtTokenProvider {
     }
 
     public JwtResponse refreshToken(String refreshToken) {
-        if (!isValid(refreshToken)){
+        if (!isValid(refreshToken)) {
             throw new AccessDeniedException("Access denied");
         }
         String userid = getIdFromToken(refreshToken);
@@ -84,7 +86,7 @@ public class JwtTokenProvider {
 
     }
 
-    public boolean isValid(String token){
+    public boolean isValid(String token) {
         Jws<Claims> claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
@@ -93,7 +95,7 @@ public class JwtTokenProvider {
         return !claims.getBody().getExpiration().before(new Date());
     }
 
-    private String getIdFromToken(String token){
+    private String getIdFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -101,6 +103,7 @@ public class JwtTokenProvider {
                 .getBody()
                 .get("id").toString();
     }
+
     private String getUsername(final String token) {
         return Jwts
                 .parserBuilder()

@@ -6,13 +6,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+
 @Data
 @AllArgsConstructor
 public class JwtEntity implements UserDetails {
-    private String id;
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
+    private String id;
 
     @Override
     public boolean isAccountNonExpired() {

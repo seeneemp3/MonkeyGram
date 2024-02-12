@@ -1,0 +1,25 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: monkeygram
+      uri: mongodb://localhost:27017/monkeygram
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    access: 3600000
+    refresh: 2592000000
+
+springdoc:
+  override-with-generic-response: false
+
+
+
+

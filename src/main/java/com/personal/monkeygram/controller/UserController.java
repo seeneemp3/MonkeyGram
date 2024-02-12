@@ -1,7 +1,6 @@
 package com.personal.monkeyGram.controller;
 
 import com.personal.monkeyGram.model.User;
-import com.personal.monkeyGram.service.FollowService;
 import com.personal.monkeyGram.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,6 +40,7 @@ public class UserController {
         log.info("Get all users");
         return ResponseEntity.ok(userService.getAll());
     }
+
     @Operation(summary = "Get User by username")
     @GetMapping("/{username}")
     public ResponseEntity<?> getUserByUsername(@PathVariable String username) {

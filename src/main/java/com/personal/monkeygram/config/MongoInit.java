@@ -1,12 +1,9 @@
 package com.personal.monkeyGram.config;
 
-import com.personal.monkeyGram.model.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
-import java.util.List;
 
 @Configuration
 public class MongoInit {
@@ -17,6 +14,7 @@ public class MongoInit {
 //            mongoTemplate.dropCollection(Post.class);
 //            mongoTemplate.dropCollection(Like.class);
 //            mongoTemplate.dropCollection(Follow.class);
+//            mongoTemplate.dropCollection(Comment.class);
 //
 //            User user1 = new User( "user1", "user1", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC");
 //            User user2 = new User( "user2", "user2", "$2a$12$LzFxOTqJTpHse/Hi74VPBugj8csX549SGh.DO59tyAm25IWZFeIOC");

@@ -29,9 +29,9 @@ public class PostServiceImpl implements PostService {
     public String deletePost(String postId) {
         User user = userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Post post = findById(postId);
-        if(post.getUserId().equals(user.getId())){
+        if (post.getUserId().equals(user.getId())) {
             postDao.deleteById(postId);
-        }else throw new PostNotFoundException("Can't delete others post");
+        } else throw new PostNotFoundException("Can't delete others post");
         return postId;
     }
 
@@ -49,16 +49,16 @@ public class PostServiceImpl implements PostService {
     public Post updatePost(Post post) {
         Post original = findById(post.getId());
 
-        if(!post.getCommentIds().equals(original.getCommentIds())){
+        if (!post.getCommentIds().equals(original.getCommentIds())) {
             original.setCommentIds(post.getCommentIds());
         }
-        if(!post.getDescription().equals(original.getDescription())){
+        if (!post.getDescription().equals(original.getDescription())) {
             original.setDescription(post.getDescription());
         }
-        if(!post.getLikes().equals(original.getLikes())){
+        if (!post.getLikes().equals(original.getLikes())) {
             original.setLikes(post.getLikes());
         }
-        if(!post.getUrl().equals(original.getUrl())){
+        if (!post.getUrl().equals(original.getUrl())) {
             original.setUrl(post.getUrl());
         }
         return postDao.save(original);

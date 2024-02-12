@@ -1,7 +1,10 @@
+.env
 # mac's files
 /.DS_Store
 # Compiled class file
 *.class
+
+
 
 # Log file
 *.log

@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Document(collection = "Feed")
+@Document(collection = "feed")
 public class Feed {
     private String userId;
     private Set<Post> feed;

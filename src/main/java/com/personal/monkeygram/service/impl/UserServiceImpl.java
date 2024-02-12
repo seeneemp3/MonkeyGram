@@ -1,7 +1,7 @@
 package com.personal.monkeyGram.service.impl;
 
-import com.personal.monkeyGram.exception.UserNotFoundException;
 import com.personal.monkeyGram.dao.UserDao;
+import com.personal.monkeyGram.exception.UserNotFoundException;
 import com.personal.monkeyGram.model.Role;
 import com.personal.monkeyGram.model.User;
 import com.personal.monkeyGram.service.UserService;
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String deleteUser(String userId) {
         User user = userDao.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
-        if(user != null){
+        if (user != null) {
             userDao.deleteById(userId);
         }
         return userId;
@@ -37,10 +37,10 @@ public class UserServiceImpl implements UserService {
     public User updateUser(User user) {
         User original = userDao.getUserById(user.getId());
 
-        if(!user.getNickname().equals(original.getNickname())){
+        if (!user.getNickname().equals(original.getNickname())) {
             original.setNickname(user.getNickname());
         }
-        if(!user.getUsername().equals(original.getUsername())){
+        if (!user.getUsername().equals(original.getUsername())) {
             original.setUsername(user.getUsername());
         }
         return userDao.save(original);
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         User user = userDao.getByUsername(username);
         if (user == null) {
-           throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException("User not found");
         }
         return user;
     }

@@ -5,8 +5,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
 public interface PostDao extends MongoRepository<Post, String> {
     List<Post> findPostsByUserId(String userId);
+
     List<Post> findTop10ByUserIdNotOrderByLikesDesc(String userId);
 }
